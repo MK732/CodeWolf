@@ -1,6 +1,7 @@
 "use client";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
+import Link from "next/link";
 
 const NavigationBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,12 +66,14 @@ const NavigationBar = () => {
                 )}
                 <span className="sr-only">Toggle</span>
               </button>
-              <button
-                type="button"
-                className="py-2 rounded-xl bg-blurple1 px-3 inline-flex items-center gap-x-2 text-sm font-medium hover:scale-105 text-alice bg-frost shadow-sm focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-              >
-                Login
-              </button>
+              <Link href={"/Login"}>
+                <button
+                  type="button"
+                  className="py-2 rounded-xl bg-blurple1 px-3 inline-flex items-center gap-x-2 text-sm font-medium hover:scale-105 text-alice bg-frost shadow-sm focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                >
+                  Login
+                </button>
+              </Link>
             </div>
             <div
               id="hs-navbar-alignment"

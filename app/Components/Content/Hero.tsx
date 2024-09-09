@@ -27,7 +27,7 @@ const Hero = () => {
         </div>
 
         {/* Right Column - Code Example */}
-        <div className="w-full md:w-1/2  rounded-lg p-4 shadow-xl shadow-alice">
+        <div className="w-full md:w-1/2  rounded-lg p-4 shadow-xl shadow-timber">
           <div className="font-mono text-sm text-gray-800 bg-white p-4 rounded-lg">
             <p className="text-green-600">+ AI Code Review Suggestions</p>
             <pre>
