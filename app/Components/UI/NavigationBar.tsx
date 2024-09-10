@@ -126,7 +126,7 @@ const NavigationBar = () => {
                 </a>
                 <a
                   className="font-medium text-alice hover:text-frost focus:outline-none focus:text-frost"
-                  href="#"
+                  href="/Code"
                 >
                   Code Review
                 </a>

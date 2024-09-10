@@ -21,7 +21,7 @@ const Hero = () => {
             efficient. Let the machine suggest improvements, catch errors, and
             help your team deploy code faster.
           </p>
-          <button className="mt-6 px-4 py-2 bg-frost text-white rounded-xl hover:scale-105 transition duration-200 block mx-auto md:mx-0">
+          <button className="mt-6 px-4 py-2 bg-frost text-onyx font-semibold  rounded-xl hover:scale-105 transition duration-200 block mx-auto md:mx-0">
             Try it for free
           </button>
         </div>

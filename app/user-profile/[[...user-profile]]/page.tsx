@@ -16,17 +16,19 @@ const DotIcon = () => {
 };
 
 const UserProfilePage = () => (
-  <UserProfile path="/user-profile" routing="path">
-    <UserProfile.Page label="account" />
-    <UserProfile.Page label="security" />
-    <UserProfile.Page
-      label="Custom Page"
-      url="/custom-page"
-      labelIcon={<DotIcon />}
-    >
-      <SettingsPage />
-    </UserProfile.Page>
-  </UserProfile>
+  <div className="bg-onyx h-screen">
+    <UserProfile path="/user-profile" routing="path">
+      <UserProfile.Page label="account" />
+      <UserProfile.Page label="security" />
+      <UserProfile.Page
+        label="Custom Page"
+        url="/custom-page"
+        labelIcon={<DotIcon />}
+      >
+        <SettingsPage />
+      </UserProfile.Page>
+    </UserProfile>
+  </div>
 );
 
 export default UserProfilePage;
