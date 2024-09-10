@@ -5,7 +5,7 @@ const CTA = () => {
     <>
       <div className="relative mx-auto max-w-5xl mt-20">
         <div className="rounded-xl p-1">
-          <div className="rounded-lg bg-onyx backdrop-blur">
+          <div className="rounded-lg bg-onyx ">
             <div className="flex w-full flex-wrap items-center justify-between gap-4 px-8 py-10 sm:px-16 lg:flex-nowrap">
               <div className="lg:max-w-xl">
                 <h2 className="block w-full pb-2 bg-gradient-to-b from-frost to-alice bg-clip-text font-bold text-transparent text-3xl sm:text-4xl">

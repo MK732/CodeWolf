@@ -32,9 +32,9 @@ const NavigationBar = () => {
 
   return (
     <>
-      <div className="flex bg-onyx justify-center items-center">
-        <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-3 dark:bg-neutral-800">
-          <nav className="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between">
+      <div className="flex bg-onyx justify-center items-center fixed top-0 left-0 right-0 z-10">
+        <header className="flex flex-wrap   sm:justify-start sm:flex-nowrap w-full text-sm py-3 dark:bg-neutral-800 ">
+          <nav className="max-w-[85rem]  w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between">
             <a
               className="sm:order-1 flex-none text-xl font-semibold text-alice"
               href="/"
