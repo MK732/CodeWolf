@@ -3,3 +3,33 @@
 @tailwind utilities;
 
 @import 'prismjs/themes/prism.css';
+
+
+
+/* Assuming cl-cardBox is for a card or box component */
+.cl-cardBox {
+    width: 100vw;
+    height: 100vh;
+    position: relative; /* or absolute, depending on your layout */
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    
+    box-sizing: border-box;
+}
+
+.cl-userButtonOuterIdentifier {
+
+    color: aliceblue;
+    outline: none;
+}
+.cl-userButtonOuterIdentifier:hover {
+    color: #77B6EA
+  
+}
+.cl-avatarBox {
+    height: 33px;
+    width: 33px;
+    outline: none;
+}
+

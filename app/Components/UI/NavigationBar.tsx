@@ -2,12 +2,16 @@
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 import Link from "next/link";
+
+import page from "../../Login/page";
+import CustomPage2 from "../Content/CTA";
 import {
   Protect,
   SignedIn,
   SignedOut,
   SignInButton,
   UserButton,
+  UserProfile,
 } from "@clerk/nextjs";
 
 const NavigationBar = () => {
@@ -16,6 +20,15 @@ const NavigationBar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const customPages = [
+    {
+      label: "Custom Page 2",
+      icon: "settings",
+      path: "/profile/custom-page-2",
+      component: CustomPage2,
+    },
+  ];
 
   return (
     <>
@@ -83,7 +96,11 @@ const NavigationBar = () => {
               </SignedOut>
 
               <SignedIn>
-                <UserButton />
+                <UserButton
+                  userProfileMode="navigation"
+                  userProfileUrl="/user-profile"
+                  showName={true}
+                />
               </SignedIn>
             </div>
 
