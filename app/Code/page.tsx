@@ -1,6 +1,17 @@
 "use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import Prism from "prismjs";
+import "prismjs/themes/prism-okaidia.css";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-rust";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-csharp";
+import "../custom-prism.css";
+
 import { Textarea } from "@/components/ui/textarea";
-import { GetServerSideProps } from "next";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -8,41 +19,95 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useEffect, useRef, useState } from "react";
-const CodeReview = () => {
-  const [reviewResult, setReviewResult] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const contentRef = useRef(null);
+import { marked } from "marked";
 
-  const handleSubmitReview = () => {
+interface HighlightCodeProps {
+  code: string;
+  language: string;
+}
+
+const highlightCode = ({ code, language }: HighlightCodeProps) => {
+  const lang = Prism.languages[language];
+  const html = Prism.highlight(code, lang, language);
+
+  return (
+    <pre className={`language-${language}`}>
+      <code dangerouslySetInnerHTML={{ __html: html }} />
+    </pre>
+  );
+};
+
+const CodeReview = () => {
+  const [reviewResult, setReviewResult] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Ensure Prism is applied to new content
+    if (contentRef.current) {
+      Prism.highlightAllUnder(contentRef.current);
+    }
+  }, [reviewResult, message]); // Add dependencies to reapply styles
+  const handleSubmitReview = async () => {
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setReviewResult(
-        "AI Review: Your code looks great! Here are some detailed insights:\n- Syntax is correct\n- Efficient use of algorithms\n- Could improve variable naming for clarity\n- Consider adding more comments for maintainability"
-      );
+    setReviewResult(""); // Clear previous result
+
+    try {
+      const response = await fetch("/api/openai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      if (typeof data.result === "string") {
+        setReviewResult(data.result);
+      } else {
+        setReviewResult("Invalid response format.");
+      }
+    } catch (error) {
+      setReviewResult("Failed to fetch AI review.");
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
+  };
+
+  const renderContent = (text: string) => {
+    const htmlContent = marked.parse(text);
+
+    return (
+      <div ref={contentRef} dangerouslySetInnerHTML={{ __html: htmlContent }} />
+    );
   };
 
   return (
     <>
       <div className="flex min-h-screen flex-col items-center justify-center overflow-y-auto">
-        <div className="mb-4 p-4  border rounded-xl bg-frost bg-opacity-10 border-onyx text-onyx w-[340px] md:w-[800px] h-[300px] md:h-[600px] overflow-y-auto">
+        <h1 className="text-xl md:p-12 md:text-4xl">AI Code Review</h1>
+        <div className="mb-4 p-4 border rounded-xl bg-frost border-onyx text-onyx w-[340px] md:w-[1000px] h-[300px] md:h-[600px] overflow-y-auto">
           {isLoading ? (
             <div className="animate-pulse">Loading AI review...</div>
           ) : (
-            <div ref={contentRef} className="whitespace-pre-line">
-              {reviewResult}
-            </div>
+            <div>{renderContent(reviewResult)}</div>
           )}
         </div>
-        <div className="w-[340px] md:w-[800px]">
+        <div className="w-[340px] md:w-[1000px]">
           <Textarea
-            className="w-full h-20 max-h-80 mb-2 rounded-xl "
+            className="w-full h-20 max-h-80 mb-2 rounded-xl"
             placeholder="Type your message here."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
           />
-          <div className="flex justify-end w-full ">
+          <div className="flex justify-end w-full">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>

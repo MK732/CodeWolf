@@ -1,0 +1,78 @@
+/* Custom CSS for Prism.js */
+
+/* General style for code blocks */
+pre[class*="language-"] {
+    background-color: #1e1e1e !important; /* Dark background */
+    color: #d4d4d4 !important; /* Light text color */
+    border-radius: 4px; /* Rounded corners */
+    padding: 1em; /* Padding around code */
+    overflow: auto; /* Scroll if content overflows */
+    margin: 0; /* Remove margin if undesired */
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace; /* Font similar to VS */
+  }
+  
+  /* Remove bold or outlined text */
+  pre[class*="language-"] code {
+    font-weight: normal; /* Ensure text is not bold */
+    border: none; /* Remove any borders */
+    outline: none; /* Remove any outlines */
+  }
+  
+  /* Customize specific token types */
+  .token.comment {
+    color: #6a9955; /* Color for comments */
+  }
+  
+  .token.keyword {
+    color: #569cd6; /* Color for keywords */
+  }
+  
+  .token.string {
+    color: #ce9178; /* Color for strings */
+  }
+  
+  .token.number {
+    color: #b5cea8; /* Color for numbers */
+  }
+  
+  .token.operator {
+    color: #d4d4d4; /* Color for operators */
+    background-color: transparent !important; /* Ensure no background color is applied */
+  }
+  
+  .token.function {
+    color: #dcdcaa; /* Color for function names */
+  }
+  
+  .token.class-name {
+    color: #4ec9b0; /* Color for class names */
+  }
+  
+  .token.type {
+    color: #4ec9b0; /* Color for types */
+  }
+  
+  .token.punctuation {
+    color: #d4d4d4; /* Color for punctuation */
+  }
+  
+  .token.tag {
+    color: #569cd6; /* Color for tags */
+  }
+  
+  .token.attribute-name {
+    color: #9cdcfe; /* Color for attribute names */
+  }
+  
+  .token.property {
+    color: #9cdcfe; /* Color for properties */
+  }
+  
+  /* Ensure background for inline code is different from block code */
+  code {
+    background-color: #2d2d2d !important; /* Slightly lighter background for inline code */
+    color: #d4d4d4; /* Consistent text color */
+    padding: 0.2em 0.4em; /* Padding around inline code */
+    border-radius: 3px; /* Rounded corners */
+  }
+  

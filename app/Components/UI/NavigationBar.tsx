@@ -1,6 +1,6 @@
 "use client";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import page from "../../Login/page";
@@ -24,8 +24,8 @@ const NavigationBar = () => {
   return (
     <>
       <div className="flex bg-onyx justify-center  items-center fixed top-0 left-0 right-0 z-10 ">
-        <header className="flex flex-wrap   sm:justify-start sm:flex-nowrap w-full text-sm py-3 dark:bg-neutral-800 ">
-          <nav className="max-w-[85rem]  w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-evenly ">
+        <header className="flex flex-wrap   md:justify-start md:flex-nowrap w-full text-sm py-3 dark:bg-neutral-800 ">
+          <nav className="max-w-[125rem]  w-full mx-auto px-4 flex flex-wrap  items-center justify-evenly ">
             <a
               className="sm:order-1 flex-none text-xl font-semibold text-alice"
               href="/"
@@ -43,7 +43,7 @@ const NavigationBar = () => {
               >
                 {isMenuOpen ? (
                   <svg
-                    className="shrink-0 size-4"
+                    className=" size-4"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -59,7 +59,7 @@ const NavigationBar = () => {
                   </svg>
                 ) : (
                   <svg
-                    className="shrink-0 size-4"
+                    className="size-4"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -78,23 +78,24 @@ const NavigationBar = () => {
                 <span className="sr-only">Toggle</span>
               </button>
 
-              <SignedOut>
-                <SignInButton>
-                  <button className="bg-frost py-1 px-3 rounded-xl hover:scale-105">
-                    Login
-                  </button>
-                </SignInButton>
-              </SignedOut>
+              <div className="w-[100px] h-[20px] md:w-[200px] md:h-[40px] flex justify-end items-center">
+                <SignedOut>
+                  <SignInButton>
+                    <button className="bg-frost py-1 px-3 rounded-xl hover:scale-105">
+                      Login
+                    </button>
+                  </SignInButton>
+                </SignedOut>
 
-              <SignedIn>
-                <UserButton
-                  userProfileMode="navigation"
-                  userProfileUrl="/user-profile"
-                  showName={true}
-                />
-              </SignedIn>
+                <SignedIn>
+                  <UserButton
+                    userProfileMode="navigation"
+                    userProfileUrl="/user-profile"
+                    showName={true}
+                  />
+                </SignedIn>
+              </div>
             </div>
-
             <div
               id="hs-navbar-alignment"
               className={`hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto sm:block sm:order-2 ${
