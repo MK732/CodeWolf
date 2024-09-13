@@ -27,7 +27,7 @@ const NavigationBar = () => {
         <header className="flex flex-wrap   md:justify-start md:flex-nowrap w-full text-sm py-3 dark:bg-neutral-800 ">
           <nav className="max-w-[125rem]  w-full mx-auto px-4 flex flex-wrap  items-center justify-evenly ">
             <a
-              className="sm:order-1 flex-none text-xl font-semibold text-alice"
+              className="sm:order-1 flex-none text-xl font-semibold hover:text-frost text-alice"
               href="/"
             >
               AI Code Review

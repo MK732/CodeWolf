@@ -9,70 +9,73 @@ pre[class*="language-"] {
     overflow: auto; /* Scroll if content overflows */
     margin: 0; /* Remove margin if undesired */
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace; /* Font similar to VS */
-  }
-  
-  /* Remove bold or outlined text */
-  pre[class*="language-"] code {
+}
+
+/* Remove bold or outlined text in code blocks */
+pre[class*="language-"] code {
     font-weight: normal; /* Ensure text is not bold */
     border: none; /* Remove any borders */
     outline: none; /* Remove any outlines */
-  }
-  
-  /* Customize specific token types */
-  .token.comment {
+}
+
+/* Customize specific token types */
+.token.comment {
     color: #6a9955; /* Color for comments */
-  }
-  
-  .token.keyword {
+}
+
+.token.keyword {
     color: #569cd6; /* Color for keywords */
-  }
-  
-  .token.string {
+}
+
+.token.string {
     color: #ce9178; /* Color for strings */
-  }
-  
-  .token.number {
+}
+
+.token.number {
     color: #b5cea8; /* Color for numbers */
-  }
-  
-  .token.operator {
+}
+
+.token.operator {
     color: #d4d4d4; /* Color for operators */
     background-color: transparent !important; /* Ensure no background color is applied */
-  }
-  
-  .token.function {
+}
+
+.token.function {
     color: #dcdcaa; /* Color for function names */
-  }
-  
-  .token.class-name {
+}
+
+.token.class-name {
     color: #4ec9b0; /* Color for class names */
-  }
-  
-  .token.type {
+}
+
+.token.type {
     color: #4ec9b0; /* Color for types */
-  }
-  
-  .token.punctuation {
+}
+
+.token.punctuation {
     color: #d4d4d4; /* Color for punctuation */
-  }
-  
-  .token.tag {
+}
+
+.token.tag {
     color: #569cd6; /* Color for tags */
-  }
-  
-  .token.attribute-name {
+}
+
+.token.attribute-name {
     color: #9cdcfe; /* Color for attribute names */
-  }
-  
-  .token.property {
+}
+
+.token.property {
     color: #9cdcfe; /* Color for properties */
-  }
-  
-  /* Ensure background for inline code is different from block code */
-  code {
-    background-color: #2d2d2d !important; /* Slightly lighter background for inline code */
-    color: #d4d4d4; /* Consistent text color */
+}
+
+/* Style for plain text outside code blocks */
+
+/* Style for inline code */
+code {
+    color: #D6C9C9;
+    font-style: italic;
+    font-weight: bolder; /* Consistent text color */
+    background-color: #37393A; /* Slightly darker background for inline code */
     padding: 0.2em 0.4em; /* Padding around inline code */
     border-radius: 3px; /* Rounded corners */
-  }
-  
+}

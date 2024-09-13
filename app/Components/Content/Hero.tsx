@@ -2,8 +2,9 @@
 import { GetServerSideProps } from "next";
 import { useEffect } from "react";
 import Prism from "prismjs";
-// Adjust the path as necessary
 
+import "prismjs/themes/prism-okaidia.css";
+import "../../custom-prism.css";
 const Hero = () => {
   useEffect(() => {
     Prism.highlightAll();
@@ -27,9 +28,9 @@ const Hero = () => {
         </div>
 
         {/* Right Column - Code Example */}
-        <div className="w-full md:w-1/2  rounded-lg p-4 shadow-xl shadow-timber">
-          <div className="font-mono text-sm text-gray-800 bg-white p-4 rounded-lg">
-            <p className="text-green-600">+ AI Code Review Suggestions</p>
+        <div className="w-full md:w-1/2  rounded-xl  p-4 shadow-xl shadow-frost hover:scale-[100.5%]">
+          <div className="font-mono text-sm text-gray-800 bg-white p-4 rounded-lg ">
+            <p className="text-onyx text-lg ">Code Snippet </p>
             <pre>
               <code className="language-javascript">
                 {`function fetchProduct(id: number): Promise<Product | null> {
@@ -52,7 +53,7 @@ const Hero = () => {
             </pre>
           </div>
           <p className="mt-4 text-gray-500  text-sm">
-            <span className="font-bold text-blue-500">AI Suggestion:</span>{" "}
+            <span className="font-extrabold text-frost ">AI Suggestion:</span>{" "}
             Status code 400 might not be appropriate. It is suggested to use 404
             instead for missing data scenarios.
           </p>
