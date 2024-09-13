@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
     // Initialize OpenAI client
     const openai = new OpenAI({
-      apiKey: process.env.NEXT_PUBLIC_OPEN_AI, // Ensure this is correctly set
+      apiKey: process.env.OPEN_AI, // Ensure this is correctly set
     });
 
     const reviewInstructions = `
@@ -24,6 +24,9 @@ Code Review Instructions:
     Final Verdict:
         Conclude with either "Needs review!" if there are significant changes or additions required.
         Or "Looks good to me!" if only minor adjustments are necessary but there are no major errors.
+
+    USER BLOCKERS:
+        If asked with anything besides a coding question, please respond with "This is not a code review or coding question".
 `;
 
     // Simplified request
