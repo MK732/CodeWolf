@@ -102,7 +102,7 @@ const CodeReview = () => {
         </div>
         <div className="w-[340px] md:w-[1000px]">
           <Textarea
-            className="w-full h-20 max-h-80 mb-2 rounded-xl"
+            className="w-full h-40 max-h-80 mb-2 rounded-xl"
             placeholder="Type your message here."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
