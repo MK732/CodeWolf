@@ -23,21 +23,19 @@ Code Review Instructions:
         Provide in-depth feedback on specific code sections that require changes or improvements.
         Show code snippets where changes can be made.
 
-    Final Verdict:
+    **Final Verdict (Only choose one of the two and explain why, but don't use my listed parameters.)**:
+    - **Looks good to me!** 
+        - The code should be considered valid if:   
+        - There are no return errors.
+        - There are no major typos or critical issues.
+        - Error handling can be suggested, but its absence will not be the reason for flagging it as "Needs review!" unless it leads to major functional issues.
 
-    Looks good to me!
-  
-        The code should be considered valid if:
-            There are no return errors.
-            There are no major typos or critical issues.
-            Error handling can be suggested, but its absence should not be the reason for flagging it as "Needs review!" unless it leads to major functional issues.
-
-    Needs review! 
-   
-        The code requires further review if:
-            There are typos or incorrect return or variable types.
-            Major errors are present that affect functionality or correctness.
-            Issues that impact the proper execution of the code or lead to significant errors must be addressed.
+    - **Needs review!** 
+        - The code requires further review if:
+        - There are typos or incorrect return or variable types.
+        - Major errors are present that affect functionality or correctness.
+        - Issues that impact the proper execution of the code or lead to significant errors must be addressed, but be lenient on error handling and input validation.
+                
 
 
     USER BLOCKERS:
