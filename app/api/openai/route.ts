@@ -1,9 +1,29 @@
 // app/api/openai/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
+
+// Initialize the rate limiter
+const rateLimiter = new RateLimiterMemory({
+  points: 3, // Number of points
+  duration: 15 * 60, // Duration in seconds (15 minutes)
+});
+
+// Helper function to handle rate limiting
+async function applyRateLimit(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for') || 'anonymous'; // Get IP from headers
+  try {
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    throw new Error('Too many requests, please try again later.');
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
+    // Apply rate limiting before processing the request
+    await applyRateLimit(req);
+
     const { message } = await req.json();
 
     // Initialize OpenAI client
@@ -35,9 +55,7 @@ Code Review Instructions:
         - There are typos or incorrect return or variable types.
         - Major errors are present that affect functionality or correctness.
         - Issues that impact the proper execution of the code or lead to significant errors must be addressed, but be lenient on error handling and input validation.
-                
-
-
+               
     USER BLOCKERS:
         If asked with anything besides a coding question, please respond with "The question {user question} is not a code review or coding question", if a secondary non programming question doesn't exist, don't include user blockers.
         If there is a code snippet and a random question, answer the code snippet but add the USER BLOCKERS in bold addressing that the 
@@ -46,22 +64,20 @@ Code Review Instructions:
         
 `;
 
-    // Simplified request
+    // Send request to OpenAI API
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini-2024-07-18', // Use a model that balances performance and accuracy
       messages: [
-        { role: 'user', content:reviewInstructions} ,
-        
+        { role: 'user', content: reviewInstructions },
         { role: 'user', content: message },
       ],
     });
 
     const result = completion.choices[0].message.content;
-   
-    
+
     return NextResponse.json({ result });
   } catch (error) {
     console.error('Error in API route:', error);
-    return new NextResponse('Failed to fetch AI review', { status: 500 });
+    return new NextResponse('Too many requests, please try again later', { status: 500 });
   }
 }
