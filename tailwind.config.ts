@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		screens: {
+			'1080p' : '1920px',
+			'1440p'  : '2560px',// Define a custom breakpoint for 1080p resolution
+		  },
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
   			'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
