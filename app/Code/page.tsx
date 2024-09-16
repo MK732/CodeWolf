@@ -105,7 +105,7 @@ const CodeReview = () => {
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 my-10 md:my-0  h-[42rem] 1440p:h-[70rem] 1080p:h-[50rem] flex flex-col items-center overflow-y-auto p-4">
+      <div className="flex-1 my-10 md:my-0  h-[42rem] 1440p:h-[73.6rem] 1080p:h-[51rem] flex flex-col items-center overflow-y-auto p-4">
         <div className="m-4 md:m-14 rounded-xl border-onyx text-onyx w-full max-w-7xl flex-1 overflow-y-auto pb-16 md:pb-52">
           {/* Ensure the review content goes here, beneath the additional content */}
           {isLoading ? (
@@ -123,7 +123,7 @@ const CodeReview = () => {
         <div className="md:w-[1000px] items-center mx-auto">
           <Textarea
             ref={textareaRef}
-            className="w-full h-30 max-h-32 mb-2 rounded-xl"
+            className="w-full h-30 max-h-28 mb-2 rounded-xl"
             placeholder="Type your message here."
             value={message}
             onChange={(e) => {
