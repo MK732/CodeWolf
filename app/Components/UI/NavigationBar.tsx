@@ -30,7 +30,7 @@ const NavigationBar = () => {
               className="sm:order-1 flex-none text-xl font-semibold hover:text-frost text-alice"
               href="/"
             >
-              AI Code Review
+              Code Wolf AI
             </a>
             <div className="sm:order-3 flex items-center gap-x-2">
               <button

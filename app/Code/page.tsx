@@ -18,7 +18,7 @@ import "prismjs/components/prism-csharp";
 import "prismjs/components/prism-c";
 import "prismjs/components/prism-cpp";
 import "../custom-prism.css";
-/* PRISM IMPORTS  END*/
+/* PRISM IMPORTS END*/
 
 /* SHAD CN IMPORTS */
 import { Textarea } from "@/components/ui/textarea";
@@ -29,8 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-/* SHAD CN IMPORTS */
+/* SHAD CN IMPORTS END */
 
 /* RANDOM IMPORTS */
 import { marked } from "marked";
@@ -89,13 +88,23 @@ const CodeReview = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col">
-      <h1 className="fixed top-16 left-0 right-0 p-4 m-4  text-xl md:text-4xl">
-        AI Code Review
-      </h1>
+    <div className="relative min-h-screen flex">
+      {/* Sidebar with additional content */}
+      <div className="fixed md:py-[68px] hidden md:block top-0 w-[340px] md:w-[300px] flex-none p-4   overflow-y-auto">
+        <h1 className="text-xl md:text-4xl mb-4">Code Wolf - AI Review</h1>
+        <div>
+          <h2 className="hidden md:block text-2xl my-4">Memory Section</h2>
+          <p className="text-lg py-2">Placeholder</p>
+          <p className="text-lg  py-2">Placeholder</p>
+          <p className="text-lg  py-2">Placeholder</p>
+          <p className="text-lg  py-2">Placeholder</p>
+        </div>
+      </div>
 
-      <div className="pt-24 flex-1 flex flex-col items-center overflow-y-auto">
-        <div className="m-14 rounded-xl border-onyx text-onyx w-[340px] md:w-[1000px] flex-1 overflow-y-auto pb-52">
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col items-center    p-4 ">
+        <div className="m-14 rounded-xl border-onyx text-onyx w-[340px] md:w-[1400px] flex-1 overflow-y-auto pb-52">
+          {/* Ensure the review content goes here, beneath the additional content */}
           {isLoading ? (
             <div className="animate-pulse h-full flex items-center justify-center">
               Loading AI review...
@@ -105,6 +114,8 @@ const CodeReview = () => {
           )}
         </div>
       </div>
+
+      {/* Textarea and submit button */}
       <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-4">
         <div className="w-[340px] md:w-[1000px] mx-auto">
           <Textarea
