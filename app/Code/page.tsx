@@ -73,7 +73,7 @@ const CodeReview = () => {
         setReviewResult("Invalid response format.");
       }
     } catch (error) {
-      setReviewResult("Failed to fetch AI review.");
+      setReviewResult("RATE LIMITED: Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -102,7 +102,7 @@ const CodeReview = () => {
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 flex flex-col items-center    p-4 ">
+      <div className="flex-1 flex flex-col items-center overflow-y-auto  p-4 ">
         <div className="m-14 rounded-xl border-onyx text-onyx w-[340px] md:w-[1400px] flex-1 overflow-y-auto pb-52">
           {/* Ensure the review content goes here, beneath the additional content */}
           {isLoading ? (
@@ -116,8 +116,8 @@ const CodeReview = () => {
       </div>
 
       {/* Textarea and submit button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-4">
-        <div className="w-[340px] md:w-[1000px] mx-auto">
+      <div className="fixed bottom-0 w-full bg-white shadow-md p-4">
+        <div className="my-auto  md:w-[1000px] items-center mx-auto">
           <Textarea
             className="w-full h-40 max-h-80 mb-2 rounded-xl"
             placeholder="Type your message here."
@@ -129,7 +129,7 @@ const CodeReview = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    className="w-full bg-frost text-onyx overflow-auto hover:scale-[101.7%] hover:bg-frost rounded-xl"
+                    className="w-full  bg-frost text-onyx overflow-auto hover:scale-[101.7%] hover:bg-frost rounded-xl"
                     onClick={handleSubmitReview}
                     disabled={isLoading}
                   >
