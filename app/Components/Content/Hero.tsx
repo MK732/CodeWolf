@@ -5,6 +5,7 @@ import Prism from "prismjs";
 
 import "prismjs/themes/prism-okaidia.css";
 import "../../custom-prism.css";
+import Link from "next/link";
 const Hero = () => {
   useEffect(() => {
     Prism.highlightAll();
@@ -22,9 +23,12 @@ const Hero = () => {
             efficient. Let the machine suggest improvements, catch errors, and
             help your team deploy code faster.
           </p>
-          <button className="mt-6 px-4 py-2 bg-frost text-onyx font-semibold  rounded-xl hover:scale-105 transition duration-200 block mx-auto md:mx-0">
+          <Link
+            href="/Code"
+            className="mt-6 text-center py-2 bg-frost text-onyx font-semibold w-36 rounded-xl hover:scale-105 transition duration-200 block mx-auto md:mx-0"
+          >
             Try it for free
-          </button>
+          </Link>
         </div>
 
         {/* Right Column - Code Example */}
