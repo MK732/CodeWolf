@@ -22,16 +22,27 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { marked } from "marked";
+import { useUser } from "@clerk/nextjs"; // Clerk import for user info
 
 const CodeReview = () => {
+  const { user } = useUser(); // Access Clerk user object
+  const userId = user?.id || "guest"; // Fallback to 'guest' if user is not authenticated
+
   const [reviewResult, setReviewResult] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-
-  const [memory, setMemory] = useState<{ title: string; result: string }[]>([]); // For memory snippets
+  const [memory, setMemory] = useState<any[]>([]); // To store memory titles and reviews
 
   const contentRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Load user-specific memory from localStorage on component mount
+  useEffect(() => {
+    const storedMemories = localStorage.getItem(`codeReviewMemory_${userId}`);
+    if (storedMemories) {
+      setMemory(JSON.parse(storedMemories));
+    }
+  }, [userId]); // Reload whenever the user changes
 
   useEffect(() => {
     if (contentRef.current) {
@@ -70,14 +81,36 @@ const CodeReview = () => {
       const data = await response.json();
 
       if (typeof data.result === "string") {
-        const newTitle = `Code Review ${memory.length + 1}`; // Generate a title for the new memory snippet
+        // Wrap user message in <pre><code> tags for syntax highlighting
+        const userMessageCode = `<pre><code class="language-javascript">${message
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")}</code></pre>`;
+
         setReviewResult(data.result);
 
-        // Save to memory snippets
-        setMemory((prevMemory) => [
-          ...prevMemory,
-          { title: newTitle, result: data.result },
-        ]);
+        // Save the new review to memory
+        const newMemory = {
+          title: `Code Review ${memory.length + 1}`,
+          userMessage: userMessageCode, // Save the user's code with <pre><code> tags
+          aiResponse: data.result, // Save the AI's response
+        };
+
+        let updatedMemory = [...memory];
+
+        // Check if memory length is 5, remove the oldest memory if so
+        if (updatedMemory.length === 5) {
+          updatedMemory.shift(); // Remove the oldest memory (first item)
+        }
+
+        updatedMemory = [...updatedMemory, newMemory]; // Add the new memory
+
+        setMemory(updatedMemory);
+
+        // Store the updated memory in localStorage for the current user
+        localStorage.setItem(
+          `codeReviewMemory_${userId}`,
+          JSON.stringify(updatedMemory)
+        );
       } else {
         setReviewResult("Invalid response format.");
       }
@@ -88,9 +121,13 @@ const CodeReview = () => {
       setMessage(""); // Clear the textarea here
     }
   };
-
-  const handleMemoryClick = (result: string) => {
-    setReviewResult(result); // Set the clicked memory snippet as the current reviewResult
+  const handleMemoryClick = (index: number) => {
+    const selectedMemory = memory[index];
+    if (selectedMemory) {
+      setReviewResult(
+        `<div class="user-message-container"><strong>USER TEXT</strong><br/>${selectedMemory.userMessage}</div><br/><strong>AI REVIEW</strong><br/><br/>${selectedMemory.aiResponse}`
+      ); // Load both user message and AI review with labels
+    }
   };
 
   const renderContent = (text: any): JSX.Element => {
@@ -103,30 +140,33 @@ const CodeReview = () => {
 
   return (
     <div className="relative min-h-screen flex">
-      {/* Sidebar with additional content */}
+      {/* Sidebar with saved memories */}
       <div className="fixed bg-onyx text-white h-screen md:py-[68px] hidden md:block top-0 w-[340px] md:w-[300px] flex-none p-4 overflow-y-auto">
         <h1 className="text-2xl xl:text-4xl hover:text-frost bg-onyx mb-4">
           Code Wolf - AI Review
         </h1>
         <div>
-          <h2 className="text-xl xl:text-2xl my-4">Memory Section</h2>
-          {/* Display memory snippets */}
-          {memory.map((item, index) => (
-            <p
-              key={index}
-              className="text-md xl:text-lg py-2 cursor-pointer hover:text-frost"
-              onClick={() => handleMemoryClick(item.result)} // On click, display the memory result
-            >
-              {item.title}
-            </p>
-          ))}
+          <h2 className="hidden md:block text-xl xl:text-2xl my-4">Memory</h2>
+          {memory.length > 0 ? (
+            memory.map((mem, index) => (
+              <p
+                key={index}
+                className="text-md xl:text-lg py-2 cursor-pointer hover:text-frost"
+                onClick={() => handleMemoryClick(index)}
+              >
+                {mem.title}
+              </p>
+            ))
+          ) : (
+            <p>No memories yet.</p>
+          )}
         </div>
       </div>
 
       {/* Main content area */}
       <div className="flex-1 my-10 md:my-0 h-[40rem] 1440p:h-[73.6rem] 1080p:h-[51rem] flex flex-col items-center overflow-y-auto xl:p-4">
         <div className="m-4 md:m-14 rounded-xl border-onyx text-onyx w-screen max-w-xl xl:max-w-7xl flex-1 overflow-y-auto pb-16 md:pb-52">
-          {/* Ensure the review content goes here, beneath the additional content */}
+          {/* Ensure the review content goes here */}
           {isLoading ? (
             <div className="animate-pulse h-full flex items-center justify-center">
               Loading AI review...

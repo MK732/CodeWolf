@@ -45,3 +45,16 @@
     outline: none;
 }
 
+
+/* custom-prism.css */
+.user-message-container {
+    max-height: 400px; /* Set the maximum height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    padding: 10px; /* Optional: Add some padding for better appearance */
+    border: 1px solid #ddd; /* Optional: Add a border to distinguish the container */
+    border-radius: 5px; /* Optional: Add rounded corners */
+  }
+  .user-message-container strong {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
