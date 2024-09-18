@@ -60,6 +60,9 @@ const CodeReview = () => {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set height based on content
     }
   };
+  const getRandom4DigitNumber = () => {
+    return Math.floor(1000 + Math.random() * 9000); // Generate a random number between 1000 and 9999
+  };
 
   const handleSubmitReview = async () => {
     setIsLoading(true);
@@ -90,7 +93,7 @@ const CodeReview = () => {
 
         // Save the new review to memory
         const newMemory = {
-          title: `Code Review ${memory.length + 1}`,
+          title: `Code Review ${getRandom4DigitNumber()}`, // Use a random 4-digit number for the title
           userMessage: userMessageCode, // Save the user's code with <pre><code> tags
           aiResponse: data.result, // Save the AI's response
         };
@@ -121,6 +124,7 @@ const CodeReview = () => {
       setMessage(""); // Clear the textarea here
     }
   };
+
   const handleMemoryClick = (index: number) => {
     const selectedMemory = memory[index];
     if (selectedMemory) {
