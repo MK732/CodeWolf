@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 
 const CTA = () => {
   return (
@@ -18,12 +19,12 @@ const CTA = () => {
                 </p>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-6 ">
-                <button className="bg-frost rounded-xl hover:scale-105 font-semibold text-onyx button-text flex items-center justify-center whitespace-nowrap  transition-all duration-300 px-8 py-3 text-xs sm:text-sm">
+                <Link
+                  href="/Code"
+                  className="bg-frost rounded-xl hover:scale-105 font-semibold text-onyx button-text flex items-center justify-center whitespace-nowrap  transition-all duration-300 px-8 py-3 text-xs sm:text-sm"
+                >
                   Get Started
-                </button>
-                <button className="flex items-center hover:scale-105 font-semibold rounded-xl justify-center whitespace-nowrap  bg-frost text-center text-onyx backdrop-blur transition-all  px-8 py-3 text-xs sm:text-sm">
-                  Learn More
-                </button>
+                </Link>
               </div>
             </div>
           </div>

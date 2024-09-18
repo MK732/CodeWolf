@@ -66,7 +66,7 @@ Code Review Instructions:
 
     // Send request to OpenAI API
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini-2024-07-18', // Use a model that balances performance and accuracy
+      model: 'gpt-4o-mini-2024-07-18',
       messages: [
         { role: 'user', content: reviewInstructions },
         { role: 'user', content: message },
