@@ -28,6 +28,8 @@ const CodeReview = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
 
+  const [memory, setMemory] = useState<{ title: string; result: string }[]>([]); // For memory snippets
+
   const contentRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -68,7 +70,14 @@ const CodeReview = () => {
       const data = await response.json();
 
       if (typeof data.result === "string") {
+        const newTitle = `Code Review ${memory.length + 1}`; // Generate a title for the new memory snippet
         setReviewResult(data.result);
+
+        // Save to memory snippets
+        setMemory((prevMemory) => [
+          ...prevMemory,
+          { title: newTitle, result: data.result },
+        ]);
       } else {
         setReviewResult("Invalid response format.");
       }
@@ -78,6 +87,10 @@ const CodeReview = () => {
       setIsLoading(false);
       setMessage(""); // Clear the textarea here
     }
+  };
+
+  const handleMemoryClick = (result: string) => {
+    setReviewResult(result); // Set the clicked memory snippet as the current reviewResult
   };
 
   const renderContent = (text: any): JSX.Element => {
@@ -92,23 +105,27 @@ const CodeReview = () => {
     <div className="relative min-h-screen flex">
       {/* Sidebar with additional content */}
       <div className="fixed bg-onyx text-white h-screen md:py-[68px] hidden md:block top-0 w-[340px] md:w-[300px] flex-none p-4 overflow-y-auto">
-        <h1 className=" text-2xl  xl:text-4xl hover:text-frost   bg-onyx mb-4">
+        <h1 className="text-2xl xl:text-4xl hover:text-frost bg-onyx mb-4">
           Code Wolf - AI Review
         </h1>
         <div>
-          <h2 className="hidden md:block text-xl xl:text-2xl  my-4">
-            Memory Section
-          </h2>
-          <p className="text-md xl:text-lg py-2">Placeholder</p>
-          <p className="text-md xl:text-lg py-2">Placeholder</p>
-          <p className="text-md xl:text-lg py-2">Placeholder</p>
-          <p className="text-md xl:text-lg py-2">Placeholder</p>
+          <h2 className="text-xl xl:text-2xl my-4">Memory Section</h2>
+          {/* Display memory snippets */}
+          {memory.map((item, index) => (
+            <p
+              key={index}
+              className="text-md xl:text-lg py-2 cursor-pointer hover:text-frost"
+              onClick={() => handleMemoryClick(item.result)} // On click, display the memory result
+            >
+              {item.title}
+            </p>
+          ))}
         </div>
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 my-10 md:my-0 h-[40rem] 1440p:h-[73.6rem] 1080p:h-[51rem]  flex flex-col   items-center overflow-y-auto xl:p-4">
-        <div className="m-4 md:m-14 rounded-xl border-onyx text-onyx w-screen  max-w-xl xl:max-w-7xl flex-1 overflow-y-auto pb-16 md:pb-52">
+      <div className="flex-1 my-10 md:my-0 h-[40rem] 1440p:h-[73.6rem] 1080p:h-[51rem] flex flex-col items-center overflow-y-auto xl:p-4">
+        <div className="m-4 md:m-14 rounded-xl border-onyx text-onyx w-screen max-w-xl xl:max-w-7xl flex-1 overflow-y-auto pb-16 md:pb-52">
           {/* Ensure the review content goes here, beneath the additional content */}
           {isLoading ? (
             <div className="animate-pulse h-full flex items-center justify-center">
@@ -122,10 +139,10 @@ const CodeReview = () => {
 
       {/* Textarea and submit button */}
       <div className="fixed bottom-0 w-full xl:w-screen items-center shadow-md p-4">
-        <div className="xl:w-[1000px]  items-center md:mx-auto">
+        <div className="xl:w-[1000px] items-center md:mx-auto">
           <Textarea
             ref={textareaRef}
-            className="xl:w-full  h-30 max-h-28 mb-2 rounded-xl"
+            className="xl:w-full h-30 max-h-28 mb-2 rounded-xl"
             placeholder="Type your message here."
             value={message}
             onChange={(e) => {
