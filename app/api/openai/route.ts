@@ -5,8 +5,8 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 // Initialize the rate limiter
 const rateLimiter = new RateLimiterMemory({
-  points: 3, // Number of points
-  duration: 15 * 60, // Duration in seconds (15 minutes)
+  points: 4, // Number of points
+  duration: 60 * 60, // Duration in seconds (15 minutes)
 });
 
 // Helper function to handle rate limiting
