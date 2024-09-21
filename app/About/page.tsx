@@ -83,7 +83,8 @@ const page = () => {
             Future Plans for Code Wolf
           </h3>
           <p className="mt-4 text-4xl text-onyx">
-            We are continuously improving Code Wolf. Here's what's coming soon:
+            We are continuously improving Code Wolf. Here&apos;s what&apos;s
+            coming soon:
           </p>
           <ul className="mt-6 text-2xl space-y-2 text-onyx">
             <li>
