@@ -33,8 +33,8 @@ const page = () => {
             your code for best practices, efficiency, and potential issues.
           </p>
           <a
-            href="#"
-            className="mt-6 inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-500"
+            href="/Code"
+            className="mt-6 inline-block rounded-2xl bg-frost text-onyx px-6 py-3 hover:scale-[105%] shadow-lg hover:bg-frost"
           >
             Get Started
           </a>
