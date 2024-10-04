@@ -14,9 +14,9 @@ const CTA = () => {
                   Enhancing Code Reviews with Artificial Intelligence
                 </h2>
                 <p className="my-4 bg-transparent font-medium leading-relaxed tracking-wide text-alice">
-                  Natural Language Processing (NLP): The AI Code Review
-                  Assistant understands and interprets natural language
-                  commands, allowing users to communicate with it effortlessly.
+                  Natural Language Processing (NLP): Code Wolf understands and
+                  interprets natural language commands, allowing users to
+                  communicate with it effortlessly.
                 </p>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-6 ">
