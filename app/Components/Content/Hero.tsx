@@ -6,6 +6,7 @@ import Prism from "prismjs";
 import "prismjs/themes/prism-okaidia.css";
 import "../../custom-prism.css";
 import Link from "next/link";
+import React from "react";
 const Hero = () => {
   useEffect(() => {
     Prism.highlightAll();
@@ -32,8 +33,8 @@ const Hero = () => {
         </div>
 
         {/* Right Column - Code Example */}
-        <div className="w-full md:w-1/2  rounded-xl  p-4 shadow-xl shadow-frost hover:scale-[100.5%]">
-          <div className="font-mono text-sm text-gray-800 bg-white p-4 rounded-lg ">
+        <div className="w-full md:w-1/2  rounded-xl  p-4  shadow-xl shadow-frost hover:scale-[100.5%]">
+          <div className="font-mono text-sm text-onyx    p-4 rounded-lg ">
             <p className="text-onyx text-lg ">Code Snippet </p>
             <pre>
               <code className="language-javascript">
@@ -56,7 +57,7 @@ const Hero = () => {
               </code>
             </pre>
           </div>
-          <p className="mt-4 text-gray-500  text-sm">
+          <p className="mt-4 text-onyx  text-sm">
             <span className="font-extrabold text-frost ">AI Suggestion:</span>{" "}
             Status code 400 might not be appropriate. It is suggested to use 404
             instead for missing data scenarios.
