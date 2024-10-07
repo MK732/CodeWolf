@@ -1,4 +1,5 @@
 # CodeWolf AI
+A Code Review AI tool to help elevate your code for best practices!
 
 Welcome to **CodeWolf AI** - an innovative platform designed to enhance your coding experience through artificial intelligence. This project is still in its early stages, with exciting developments like a VS Code extension on the horizon.
 
