@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Prism from "prismjs";
-import "prismjs/themes/prism-okaidia.css";
+import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-java";
@@ -12,104 +12,101 @@ import "prismjs/components/prism-tsx";
 import "prismjs/components/prism-csharp";
 import "prismjs/components/prism-c";
 import "prismjs/components/prism-cpp";
-import "../custom-prism.css";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { marked } from "marked";
-import { useUser } from "@clerk/nextjs"; // Clerk import for user info
+import { useUser } from "@clerk/nextjs";
+import { Code, History, Send, Zap } from "lucide-react";
 
 const CodeReview = () => {
-  const { user } = useUser(); // Access Clerk user object
-  const userId = user?.id || "guest"; // Fallback to 'guest' if user is not authenticated
+  const { user } = useUser();
+  const userId = user?.id || "guest";
 
-  const [reviewResult, setReviewResult] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [memory, setMemory] = useState<any[]>([]); // To store memory titles and reviews
+  const [reviewResult, setReviewResult] = useState("");
+  const [parsedReviewResult, setParsedReviewResult] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [memory, setMemory] = useState<
+    Array<{ title: string; userMessage: string; aiResponse: string }>
+  >([]);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load user-specific memory from localStorage on component mount
   useEffect(() => {
     const storedMemories = localStorage.getItem(`codeReviewMemory_${userId}`);
     if (storedMemories) {
       setMemory(JSON.parse(storedMemories));
     }
-  }, [userId]); // Reload whenever the user changes
+  }, [userId]);
 
   useEffect(() => {
     if (contentRef.current) {
       Prism.highlightAllUnder(contentRef.current);
     }
-  }, [reviewResult, message]);
+  }, [parsedReviewResult, message]);
 
   useEffect(() => {
     resizeTextarea();
   }, [message]);
 
+  useEffect(() => {
+    const parseReviewResult = async () => {
+      if (reviewResult) {
+        const parsed = await marked(reviewResult);
+        setParsedReviewResult(parsed);
+      }
+    };
+    parseReviewResult();
+  }, [reviewResult]);
+
   const resizeTextarea = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // Reset height
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set height based on content
+      textareaRef.current.style.height = "auto";
+      const scrollHeight = textareaRef.current.scrollHeight;
+      const maxHeight = 300;
+      textareaRef.current.style.height = `${Math.min(
+        scrollHeight,
+        maxHeight
+      )}px`;
     }
   };
-  const getRandom4DigitNumber = () => {
-    return Math.floor(1000 + Math.random() * 9000); // Generate a random number between 1000 and 9999
-  };
+
+  const getRandom4DigitNumber = () => Math.floor(1000 + Math.random() * 9000);
 
   const handleSubmitReview = async () => {
     setIsLoading(true);
     setReviewResult("");
+    setParsedReviewResult("");
 
     try {
       const response = await fetch("/api/openai", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
 
       if (typeof data.result === "string") {
-        // Wrap user message in <pre><code> tags for syntax highlighting
         const userMessageCode = `<pre><code class="language-javascript">${message
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")}</code></pre>`;
 
         setReviewResult(data.result);
 
-        // Save the new review to memory
         const newMemory = {
-          title: `Code Review ${getRandom4DigitNumber()}`, // Use a random 4-digit number for the title
-          userMessage: userMessageCode, // Save the user's code with <pre><code> tags
-          aiResponse: data.result, // Save the AI's response
+          title: `Review ${getRandom4DigitNumber()}`,
+          userMessage: userMessageCode,
+          aiResponse: data.result,
         };
 
-        let updatedMemory = [...memory];
-
-        // Check if memory length is 5, remove the oldest memory if so
-        if (updatedMemory.length === 5) {
-          updatedMemory.shift(); // Remove the oldest memory (first item)
-        }
-
-        updatedMemory = [...updatedMemory, newMemory]; // Add the new memory
-
+        const updatedMemory = [...memory, newMemory].slice(-5);
         setMemory(updatedMemory);
-
-        // Store the updated memory in localStorage for the current user
         localStorage.setItem(
           `codeReviewMemory_${userId}`,
           JSON.stringify(updatedMemory)
@@ -121,101 +118,101 @@ const CodeReview = () => {
       setReviewResult("RATE LIMITED: Please try again later.");
     } finally {
       setIsLoading(false);
-      setMessage(""); // Clear the textarea here
+      setMessage("");
     }
   };
 
-  const handleMemoryClick = (index: number) => {
+  const handleMemoryClick = async (index: number) => {
     const selectedMemory = memory[index];
     if (selectedMemory) {
-      setReviewResult(
-        `<div class="user-message-container"><strong>USER TEXT</strong><br/>${selectedMemory.userMessage}</div><br/><strong>AI REVIEW</strong><br/><br/>${selectedMemory.aiResponse}`
-      ); // Load both user message and AI review with labels
+      const combinedContent = `<div class="user-message-container"><strong>USER CODE</strong><br/>${selectedMemory.userMessage}</div><br/><strong>AI REVIEW</strong><br/><br/>${selectedMemory.aiResponse}`;
+      setReviewResult(combinedContent);
+      const parsed = await marked(combinedContent);
+      setParsedReviewResult(parsed);
     }
-  };
-
-  const renderContent = (text: any): JSX.Element => {
-    const htmlContent: any = marked.parse(text);
-
-    return (
-      <div ref={contentRef} dangerouslySetInnerHTML={{ __html: htmlContent }} />
-    );
   };
 
   return (
-    <div className="relative min-h-screen flex">
-      {/* Sidebar with saved memories */}
-      <div className="fixed bg-onyx text-white h-screen md:py-[68px] hidden md:block top-0 w-[340px] md:w-[300px] flex-none p-4 overflow-y-auto">
-        <h1 className="text-2xl xl:text-4xl hover:text-frost bg-onyx mb-4">
-          Code Wolf - AI Review
-        </h1>
-        <div>
-          <h2 className="hidden md:block text-xl xl:text-2xl my-4">Memory</h2>
-          {memory.length > 0 ? (
-            memory.map((mem, index) => (
-              <p
-                key={index}
-                className="text-md xl:text-lg py-2 cursor-pointer hover:text-frost"
-                onClick={() => handleMemoryClick(index)}
-              >
-                {mem.title}
-              </p>
-            ))
-          ) : (
-            <p>No memories yet.</p>
-          )}
-        </div>
-      </div>
-
-      {/* Main content area */}
-      <div className="flex-1 my-10 md:my-0 h-[40rem] 1440p:h-[73.6rem] 1080p:h-[51rem] flex flex-col items-center overflow-y-auto xl:p-4">
-        <div className="m-4 md:m-14 rounded-xl border-onyx text-onyx w-screen max-w-xl xl:max-w-7xl flex-1 overflow-y-auto pb-16 md:pb-52">
-          {/* Ensure the review content goes here */}
-          {isLoading ? (
-            <div className="animate-pulse h-full flex items-center justify-center">
-              Loading AI review...
-            </div>
-          ) : (
-            <div className="">{renderContent(reviewResult)}</div>
-          )}
-        </div>
-      </div>
-
-      {/* Textarea and submit button */}
-      <div className="fixed bottom-0 w-full xl:w-screen items-center shadow-md p-4">
-        <div className="xl:w-[1000px] items-center md:mx-auto">
-          <Textarea
-            ref={textareaRef}
-            className="xl:w-full h-30 max-h-28 mb-2 rounded-xl"
-            placeholder="Type your message here."
-            value={message}
-            onChange={(e) => {
-              setMessage(e.target.value);
-              resizeTextarea(); // Resize textarea on change
-            }}
-          />
-          <div className="flex justify-end w-full">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    className="w-full bg-frost text-onyx overflow-auto hover:scale-[101.7%] hover:bg-frost rounded-xl"
-                    onClick={handleSubmitReview}
-                    disabled={isLoading}
+    <div className="fixed inset-0 top-[64px] bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+      <div className="flex h-full">
+        {/* Sidebar with memories */}
+        <aside className="w-64 bg-gray-800 overflow-y-auto">
+          <div className="p-4">
+            <h2 className="text-xl font-bold mb-4 flex items-center">
+              <History className="mr-2" />
+              Review History
+            </h2>
+            {memory.length > 0 ? (
+              <ul className="space-y-2">
+                {memory.map((mem, index) => (
+                  <li
+                    key={index}
+                    className="py-2 px-3 rounded-md cursor-pointer hover:bg-gray-700 transition-colors"
+                    onClick={() => handleMemoryClick(index)}
                   >
-                    {isLoading ? "Submitting..." : "Submit Code Review"}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="bottom"
-                  className="text-onyx overflow-y-auto bg-frost rounded-xl py-2 m-2"
-                >
-                  <p>Submit to Code Review!</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                    {mem.title}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400 italic">No reviews yet</p>
+            )}
           </div>
-        </div>
+        </aside>
+
+        {/* Main content area */}
+        <main className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 p-4 overflow-hidden">
+            <Card className="h-full overflow-hidden bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="flex items-center text-white">
+                  <Zap className="mr-2 text-yellow-400" />
+                  AI Review Results
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="h-[calc(100%-4rem)] overflow-hidden">
+                <ScrollArea className="h-full">
+                  {isLoading ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-frost"></div>
+                    </div>
+                  ) : (
+                    <div
+                      ref={contentRef}
+                      className="prose prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: parsedReviewResult }}
+                    />
+                  )}
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Input area */}
+          <div className="p-4 bg-gray-800/50">
+            <div className="max-w-3xl mx-auto">
+              <Textarea
+                ref={textareaRef}
+                className="w-full mb-2 rounded-lg bg-gray-700 text-white border-gray-600 focus:border-frost focus:ring focus:ring-frost focus:ring-opacity-50 resize-none"
+                placeholder="Paste your code here for review..."
+                value={message}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                  resizeTextarea();
+                }}
+                style={{ maxHeight: "300px", overflowY: "auto" }}
+              />
+              <Button
+                className="w-full bg-frost text-gray-900 hover:bg-frost/90 rounded-lg transition-colors flex items-center justify-center"
+                onClick={handleSubmitReview}
+                disabled={isLoading}
+              >
+                <Send className="mr-2" />
+                {isLoading ? "Analyzing..." : "Submit for Review"}
+              </Button>
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   );
